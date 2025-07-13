@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('../partials/head'); %>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card" style="max-width: 500px;">
+            <div class="login-header">
+                <i class="fa-solid fa-user-plus"></i>
+                <h2>Registro de Usuario</h2>
+                <p>Completa tus datos para crear una cuenta</p>
+            </div>
+            
+            <% if (error) { %>
+                <div class="alert alert-danger">
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                    <%= error %>
+                </div>
+            <% } %>
+            
+            <% if (success) { %>
+                <div class="alert alert-success">
+                    <i class="fa-solid fa-circle-check me-2"></i>
+                    <%= success %>
+                </div>
+            <% } %>
+            
+            <form method="POST" action="/register">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="documento" class="form-label">
+                                <i class="fa-solid fa-id-card me-2"></i>Documento
+                            </label>
+                            <input type="text" class="form-control" id="documento" name="documento" 
+                                    placeholder="12345678" required minlength="7" maxlength="10">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="telefono" class="form-label">
+                                <i class="fa-solid fa-phone me-2"></i>Teléfono
+                            </label>
+                            <input type="tel" class="form-control" id="telefono" name="telefono" 
+                                    placeholder="3001234567" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="nombreCompleto" class="form-label">
+                        <i class="fa-solid fa-user me-2"></i>Nombre Completo
+                    </label>
+                    <input type="text" class="form-control" id="nombreCompleto" name="nombreCompleto" 
+                            placeholder="Juan Carlos Pérez García" required maxlength="150">
+                </div>
+                
+                <div class="form-group">
+                    <label for="correo" class="form-label">
+                        <i class="fa-solid fa-envelope me-2"></i>Correo Electrónico
+                    </label>
+                    <input type="email" class="form-control" id="correo" name="correo" 
+                            placeholder="juan.perez@email.com" required>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="fechaNacimiento" class="form-label">
+                                <i class="fa-solid fa-calendar-days me-2"></i>Fecha de Nacimiento
+                            </label>
+                            <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="rol" class="form-label">
+                                <i class="fa-solid fa-user-tag me-2"></i>Rol
+                            </label>
+                            <select class="form-control" id="rol" name="rol" required>
+                                <option value="vendedor">Vendedor</option>
+                                <option value="administrador">Administrador</option>
+                                <option value="gerente">Gerente</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">
+                        <i class="fa-solid fa-lock me-2"></i>Contraseña
+                    </label>
+                    <input type="password" class="form-control" id="password" name="password" 
+                           placeholder="Mínimo 6 caracteres" required minlength="6">
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-login">
+                    <i class="fa-solid fa-user-plus me-2"></i>Registrar Usuario
+                </button>
+            </form>
+            
+            <div class="text-center mt-4">
+                <p class="mb-0">
+                    ¿Ya tienes cuenta? 
+                    <a href="/login" class="text-decoration-none">
+                        <i class="fa-solid fa-right-to-bracket me-1"></i>Iniciar Sesión
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
