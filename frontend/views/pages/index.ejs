@@ -50,6 +50,11 @@
                                 <i class="fa-solid fa-tags me-1"></i>
                                 <%= products.length %> productos
                             </span>
+                            <% if (userRol === 'administrador') { %>
+                                <button class="btn btn-success ms-3" data-bs-toggle="modal" data-bs-target="#modalCrearProducto">
+                                    <i class="fa-solid fa-plus me-1"></i> Agregar producto
+                                </button>
+                            <% } %>
                         </div>
                     </div>
                 </div>
@@ -70,9 +75,9 @@
                         <div class="col-lg-4 col-md-6 col-sm-12">
                             <div class="card product-card h-100">
                                 <img src="<%= product.imagen %>" 
-                                     class="product-image" 
-                                     alt="<%= product.nombre %>"
-                                     onerror="this.src='https://via.placeholder.com/300x200?text=Sin+Imagen'">
+                                        class="product-image" 
+                                        alt="<%= product.nombre %>"
+                                        onerror="this.src='https://via.placeholder.com/300x200?text=Sin+Imagen'">
                                 
                                 <div class="product-info">
                                     <h5 class="product-title">
@@ -102,6 +107,25 @@
                                             Ref: <%= product.referencia %>
                                         </small>
                                     </div>
+                                    <% if (userRol === 'administrador') { %>
+                                    <div class="mt-3 d-flex gap-2">
+                                        <button class="btn btn-warning btn-sm" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalEditarProducto" 
+                                                data-product='<%- JSON.stringify(product) %>'
+                                                onclick="abrirModalEditar(this)">
+                                            <i class="fa-solid fa-pen-to-square me-1"></i> Editar
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalEliminarProducto" 
+                                                data-product-id="<%= product.referencia %>"
+                                                data-product-nombre="<%= product.nombre %>"
+                                                onclick="abrirModalEliminar(this)">
+                                            <i class="fa-solid fa-trash me-1"></i> Eliminar
+                                        </button>
+                                    </div>
+                                    <% } %>
                                 </div>
                             </div>
                         </div>
@@ -110,6 +134,139 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Crear Producto -->
+    <div class="modal fade" id="modalCrearProducto" tabindex="-1" aria-labelledby="modalCrearProductoLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="formCrearProducto" method="POST" action="/product">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalCrearProductoLabel">Agregar producto</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="nombreNuevo" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombreNuevo" name="nombreProducto" required>
+              </div>
+              <div class="mb-3">
+                <label for="descripcionNuevo" class="form-label">Descripción</label>
+                <textarea class="form-control" id="descripcionNuevo" name="descripcionProducto" required></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="precioNuevo" class="form-label">Precio</label>
+                <input type="number" class="form-control" id="precioNuevo" name="precioProducto" required min="0">
+              </div>
+              <div class="mb-3">
+                <label for="stockNuevo" class="form-label">Stock</label>
+                <input type="number" class="form-control" id="stockNuevo" name="stockProducto" required min="0">
+              </div>
+              <div class="mb-3">
+                <label for="referenciaNuevo" class="form-label">Referencia</label>
+                <input type="text" class="form-control" id="referenciaNuevo" name="referenciaProducto" required>
+              </div>
+              <div class="mb-3">
+                <label for="imagenNuevo" class="form-label">URL Imagen</label>
+                <input type="text" class="form-control" id="imagenNuevo" name="imagenProducto">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-success">Crear</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Editar Producto -->
+    <div class="modal fade" id="modalEditarProducto" tabindex="-1" aria-labelledby="modalEditarProductoLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="formEditarProducto" method="POST">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalEditarProductoLabel">Editar producto</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="editarNombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="editarNombre" name="nombreProducto" required>
+              </div>
+              <div class="mb-3">
+                <label for="editarDescripcion" class="form-label">Descripción</label>
+                <textarea class="form-control" id="editarDescripcion" name="descripcionProducto" required></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="editarPrecio" class="form-label">Precio</label>
+                <input type="number" class="form-control" id="editarPrecio" name="precioProducto" required min="0">
+              </div>
+              <div class="mb-3">
+                <label for="editarStock" class="form-label">Stock</label>
+                <input type="number" class="form-control" id="editarStock" name="stockProducto" required min="0">
+              </div>
+              <div class="mb-3">
+                <label for="editarReferencia" class="form-label">Referencia</label>
+                <input type="text" class="form-control" id="editarReferencia" name="referenciaProducto" required readonly>
+              </div>
+              <div class="mb-3">
+                <label for="editarImagen" class="form-label">URL Imagen</label>
+                <input type="text" class="form-control" id="editarImagen" name="imagenProducto">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-warning">Guardar cambios</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Eliminar Producto -->
+    <div class="modal fade" id="modalEliminarProducto" tabindex="-1" aria-labelledby="modalEliminarProductoLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="formEliminarProducto" method="POST">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalEliminarProductoLabel">Eliminar producto</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" id="eliminarId" name="id">
+              <p>¿Estás seguro de que deseas eliminar el producto <strong id="eliminarNombre"></strong>?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-danger">Eliminar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Llenar modal de edición con datos del producto
+      function abrirModalEditar(btn) {
+        const product = JSON.parse(btn.getAttribute('data-product'));
+        document.getElementById('editarId').value = product.referencia;
+        document.getElementById('editarNombre').value = product.nombre;
+        document.getElementById('editarDescripcion').value = product.descripcion;
+        document.getElementById('editarPrecio').value = product.precio;
+        document.getElementById('editarStock').value = product.stock;
+        document.getElementById('editarReferencia').value = product.referencia;
+        document.getElementById('editarImagen').value = product.imagen;
+        document.getElementById('formEditarProducto').action = `/product/${product.referencia}`;
+      }
+      // Llenar modal de eliminación
+      function abrirModalEliminar(btn) {
+        const id = btn.getAttribute('data-product-id');
+        const nombre = btn.getAttribute('data-product-nombre');
+        document.getElementById('eliminarId').value = id;
+        document.getElementById('eliminarNombre').textContent = nombre;
+        document.getElementById('formEliminarProducto').action = `/product/${id}/delete`;
+      }
+    </script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
